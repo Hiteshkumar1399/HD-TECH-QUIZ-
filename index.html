@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ઓનલાઈન ટેસ્ટ ક્વિઝ</title>
+    <title>કોમ્પ્યુટર જ્ઞાન ક્વિઝ ટેસ્ટ</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -20,12 +20,12 @@
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
             padding: 30px;
             box-sizing: border-box;
         }
         h2 {
-            color: #333;
+            color: #1a73e8;
             text-align: center;
             margin-bottom: 25px;
         }
@@ -34,6 +34,7 @@
             font-weight: 600;
             color: #1a1a1a;
             margin-bottom: 20px;
+            line-height: 1.5;
         }
         .options-container {
             display: flex;
@@ -70,6 +71,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
         }
         .next-btn {
             background-color: #1a73e8;
@@ -103,7 +106,7 @@
 
 <div class="quiz-container">
     <div id="quiz-box">
-        <h2>ઓનલાઈન ક્વિઝ ટેસ્ટ</h2>
+        <h2>કોમ્પ્યુટર જ્ઞાન ઓનલાઈન ટેસ્ટ</h2>
         <div class="question" id="question">પ્રશ્ન લોડ થઈ રહ્યો છે...</div>
         <div class="options-container" id="options"></div>
         <div class="footer">
@@ -115,21 +118,56 @@
 
 <script>
     const quizData = [
-        {
-            question: "ગુજરાતનું પાટનગર કયું છે?",
-            a: "અમદાવાદ", b: "ગાંધીનગર", c: "સુરત", d: "રાજકોટ",
-            correct: "b"
-        },
-        {
-            question: "ભારતનું રાષ્ટ્રીય પક્ષી કયું છે?",
-            a: "પોપટ", b: "ચકલી", c: "મોર", d: "કબૂતર",
-            correct: "c"
-        },
-        {
-            question: "૫ + ૭ કેટલા થાય?",
-            a: "૧૦", b: "૧૧", c: "૧૨", d: "૧૩",
-            correct: "c"
-        }
+        { question: "કોમ્પ્યુટરના પિતા તરીકે કોણ ઓળખાય છે?", a: "એલન ટ્યુરિંગ", b: "ચાર્લ્સ બેબેજ", c: "બિલ ગેટ્સ", d: "સ્ટીવ જોબ્સ", correct: "b" },
+        { question: "કોમ્પ્યુટરનું મગજ કોને કહેવામાં આવે છે?", a: "RAM", b: "Hard Disk", c: "CPU", d: "Monitor", correct: "c" },
+        { question: "CPU નું પૂરું નામ શું છે?", a: "Central Processing Unit", b: "Computer Processing Unit", c: "Central Power Unit", d: "Control Processing Unit", correct: "a" },
+        { question: "કોમ્પ્યુટરમાં કાયમી સંગ્રહ (Permanent Storage) માટે કોનો ઉપયોગ થાય છે?", a: "RAM", b: "Hard Disk", c: "Cache", d: "Register", correct: "b" },
+        { question: "નીચેનામાંથી કયું ઇનપુટ સાધન (Input Device) છે?", a: "Monitor", b: "Printer", c: "Keyboard", d: "Speaker", correct: "c" },
+        { question: "નીચેનામાંથી કયું આઉટપુટ સાધન (Output Device) છે?", a: "Mouse", b: "Keyboard", c: "Scanner", d: "Printer", correct: "d" },
+        { question: "RAM નું પૂરું નામ શું છે?", a: "Read Access Memory", b: "Random Access Memory", c: "Rapid Access Memory", d: "Run Access Memory", correct: "b" },
+        { question: "ROM નું પૂરું નામ શું છે?", a: "Read Only Memory", b: "Random Only Memory", c: "Read One Memory", d: "Real Online Memory", correct: "a" },
+        { question: "કોમ્પ્યુટર કઈ ભાષા સીધી સમજી શકે છે?", a: "બાઈનરી (મશીન લેંગ્વેજ)", b: "હાઈ લેવલ લેંગ્વેજ", c: "ગુજરાતી", d: "અંગ્રેજી", correct: "a" },
+        { question: "બાઈનરી પદ્ધતિમાં કયા બે અંકોનો ઉપયોગ થાય છે?", a: "૧ અને ૨", b: "૦ અને ૧", c: "૧ અને ૧૦", d: "૯ અને ૦", correct: "b" },
+        { question: "૧ બાઈટ (Byte) એટલે કેટલા બીટ્સ (Bits)?", a: "૪ બીટ્સ", b: "૮ બીટ્સ", c: "૧૬ બીટ્સ", d: "૧૦૨૪ બીટ્સ", correct: "b" },
+        { question: "૧ KB એટલે કેટલા બાઈટ્સ થાય?", a: "૧૦૦૦ બાઈટ્સ", b: "૧૦૨૪ બાઈટ્સ", c: "૫૧૨ બાઈટ્સ", d: "૧૨૦૦ બાઈટ્સ", correct: "b" },
+        { question: "WWW નું પૂરું નામ શું છે?", a: "World Wide Web", b: "World Whole Web", c: "Web Wide World", d: "Wide World Web", correct: "a" },
+        { question: "કોમ્પ્યુટરમાં બધી ફાઈલો ડિલીટ કર્યા પછી ક્યાં જાય છે?", a: "Control Panel", b: "My Documents", c: "Recycle Bin", d: "Desktop", correct: "c" },
+        { question: "કોમ્પ્યુટરમાં કોપી (Copy) કરવા માટેની શોર્ટકટ કી કઈ છે?", a: "Ctrl + X", b: "Ctrl + V", c: "Ctrl + C", d: "Ctrl + A", correct: "c" },
+        { question: "કોમ્પ્યુટરમાં પેસ્ટ (Paste) કરવા માટેની શોર્ટકટ કી કઈ છે?", a: "Ctrl + P", b: "Ctrl + V", c: "Ctrl + C", d: "Ctrl + S", correct: "b" },
+        { question: "કોમ્પ્યુટરમાં બધી વસ્તુ એકસાથે સિલેક્ટ (Select All) કરવા માટે કઈ કી વપરાય?", a: "Ctrl + A", b: "Ctrl + S", c: "Ctrl + Alt", d: "Ctrl + X", correct: "a" },
+        { question: "કઈ શોર્ટકટ કીનો ઉપયોગ ફાઈલ સેવ (Save) કરવા માટે થાય છે?", a: "Ctrl + S", b: "Ctrl + Shift", c: "Ctrl + O", d: "Ctrl + N", correct: "a" },
+        { question: "કોઈપણ પ્રોગ્રામ બંધ કરવા માટે કઈ શોર્ટકટ કી વપરાય છે?", a: "Ctrl + F4", b: "Alt + F4", c: "Shift + F4", d: "Ctrl + Escape", correct: "b" },
+        { question: "સૌથી પહેલું વેબ બ્રાઉઝર કયું હતું?", a: "Google Chrome", b: "Internet Explorer", c: "WorldWideWeb (Nexus)", d: "Mozilla Firefox", correct: "c" },
+        { question: "નીચેનામાંથી કઈ ઓપરેટિંગ સિસ્ટમ (OS) નું ઉદાહરણ છે?", a: "MS Word", b: "Windows", c: "Google Chrome", d: "Photoshop", correct: "b" },
+        { question: "ઇન્ટરનેટ પર વેબસાઇટ શોધવા માટે કોનો ઉપયોગ થાય છે?", a: "Search Engine", b: "Keyboard", c: "Hardware", d: "CPU", correct: "a" },
+        { question: "નીચેનામાંથી કયું સર્ચ એન્જિન છે?", a: "Windows", b: "Google", c: "Facebook", d: "MS Office", correct: "b" },
+        { question: "HTTP નું પૂરું નામ શું છે?", a: "Hyper Text Transfer Protocol", b: "Hyper Text Total Protocol", c: "High Text Transfer Protocol", d: "Hyper Text Technical Protocol", correct: "a" },
+        { question: "કોમ્પ્યુટરમાં અચાનક પાવર બંધ થઈ જાય તો કઈ મેમરીનો ડેટા નાશ પામે છે?", a: "ROM", b: "Hard Disk", c: "RAM", d: "SSD", correct: "c" },
+        { question: "નીચેનામાંથી કઈ સોશિયલ મીડિયા સાઇટ નથી?", a: "Facebook", b: "Instagram", c: "Twitter", d: "Google", correct: "d" },
+        { question: "કોમ્પ્યુટરમાં સિક્યોરિટી માટે અને વાયરસ રોકવા માટે શું વપરાય છે?", a: "Antivirus", b: "VLC Player", c: "Adobe Reader", d: "MS Paint", correct: "a" },
+        { question: "દસ્તાવેજ કે પત્ર લખવા માટે કયા સોફ્ટવેરનો ઉપયોગ થાય છે?", a: "MS Excel", b: "MS Word", c: "MS PowerPoint", d: "Notepad", correct: "b" },
+        { question: "હિસાબો રાખવા કે માર્કશીટ બનાવવા માટે કયો પ્રોગ્રામ બેસ્ટ છે?", a: "MS Word", b: "MS Excel", c: "MS PowerPoint", d: "Paint", correct: "b" },
+        { question: "પ્રેઝન્ટેશન (સ્લાઇડ શો) બનાવવા માટે કયો પ્રોગ્રામ વપરાય છે?", a: "MS Word", b: "MS Excel", c: "MS PowerPoint", d: "Access", correct: "c" },
+        { question: "IP Address નું પૂરું નામ શું છે?", a: "Internet Protocol", b: "Internal Protocol", c: "Internet Path", d: "Instant Protocol", correct: "a" },
+        { question: "URL નું પૂરું નામ શું છે?", a: "Uniform Resource Locator", b: "Universal Resource Locator", c: "Uniform Resource Link", d: "United Resource Locator", correct: "a" },
+        { question: "કોમ્પ્યુટર નેટવર્કમાં આખા વિશ્વને જોડતા નેટવર્કને શું કહેવાય?", a: "LAN", b: "MAN", c: "Internet", d: "Intranet", correct: "c" },
+        { question: "LAN નું પૂરું નામ શું છે?", a: "Local Area Network", b: "Logical Area Network", c: "Long Area Network", d: "Land Area Network", correct: "a" },
+        { question: "કોઈપણ ફાઈલ કે ફોલ્ડરનું નામ બદલવા (Rename) કઈ ફંક્શન કી વપરાય છે?", a: "F1", b: "F2", c: "F5", d: "F7", correct: "b" },
+        { question: "વેબ પેજ રિફ્રેશ (Refresh) કરવા માટે કઈ ફંક્શન કી નો ઉપયોગ થાય છે?", a: "F2", b: "F5", c: "F9", d: "F11", correct: "b" },
+        { question: "સ્પેલિંગ અને વ્યાકરણ (Spelling & Grammar) ચેક કરવા કઈ કી વપરાય?", a: "F5", b: "F7", c: "F10", d: "F12", correct: "b" },
+        { question: "પીડીએફ (PDF) નું પૂરું નામ શું છે?", a: "Portable Document Format", b: "Print Document Format", c: "Public Document Format", d: "Port Document File", correct: "a" },
+        { question: "કોમ્પ્યુટરના ભૌતિક ભાગો જેને આપણે અડી શકીએ તેને શું કહેવાય?", a: "Software", b: "Hardware", c: "Malware", d: "Application", correct: "b" },
+        { question: "કોમ્પ્યુટર પ્રોગ્રામ્સના સમૂહને જેને અડી શકાતું નથી તેને શું કહેવાય?", a: "Hardware", b: "Software", c: "Firmware", d: "Cabinet", correct: "b" },
+        { question: "ઇમેઇલ (E-mail) નું પૂરું નામ શું છે?", a: "Electric Mail", b: "Electronic Mail", c: "Engine Mail", d: "Easy Mail", correct: "b" },
+        { question: "સૌથી ઝડપી કોમ્પ્યુટર કયા પ્રકારના હોય છે?", a: "Micro Computer", b: "Mini Computer", c: "Mainframe Computer", d: "Super Computer", correct: "d" },
+        { question: "કોમ્પ્યુટર સાક્ષરતા દિવસ ક્યારે ઉજવવામાં આવે છે?", a: "૫ સપ્ટેમ્બર", b: "૨ ડિસેમ્બર", c: "૧૫ ઓગસ્ટ", d: "૨૬ જાન્યુઆરી", correct: "b" },
+        { question: "કીબોર્ડમાં સૌથી મોટી કી કઈ હોય છે?", a: "Enter Key", b: "Spacebar Key", c: "Shift Key", d: "Backspace Key", correct: "b" },
+        { question: "USB નું પૂરું નામ શું છે?", a: "Universal Serial Bus", b: "United Serial Bus", c: "Universal System Bus", d: "Unique Serial Bus", correct: "a" },
+        { question: "ઇન્ટરનેટના માધ્યમથી ખરીદ-વેચાણ કરવાની પદ્ધતિને શું કહેવાય?", a: "E-Commerce", b: "E-Mail", c: "E-Banking", d: "E-Governance", correct: "a" },
+        { question: "Wi-Fi નું પૂરું નામ શું છે?", a: "Wireless Fidelity", b: "Wire Focus", c: "Wireless Finder", d: "Window Fidelity", correct: "a" },
+        { question: "કોમ્પ્યુટરમાં ભૂલ (Error) ને ટેકનિકલ ભાષામાં શું કહેવામાં આવે છે?", a: "Bug", b: "Virus", c: "Mistake", d: "Crash", correct: "a" },
+        { question: "ગૂગલ ક્રોમ (Google Chrome) એ શું છે?", a: "ઓપરેટિંગ સિસ્ટમ", b: "વેબ બ્રાઉઝર", c: "સર્ચ એન્જિન", d: "હાર્ડવેર", correct: "b" },
+        { question: "ભારતમાં બનેલું સૌપ્રથમ સુપર કોમ્પ્યુટર કયું હતું?", a: "PARAM 8000", b: "SAGA 220", c: "ENIAC", d: "ANUPAM", correct: "a" }
     ];
 
     let currentQuiz = 0;
@@ -154,7 +192,7 @@
         ['a', 'b', 'c', 'd'].forEach(letter => {
             const btn = document.createElement('button');
             btn.classList.add('option-btn');
-            btn.innerText = currentData[letter];
+            btn.innerText = `${letter.toUpperCase()}. ${currentData[letter]}`;
             btn.setAttribute('data-ans', letter);
             btn.addEventListener('click', selectAnswer);
             optionsContainer.appendChild(btn);
@@ -184,10 +222,12 @@
         if(currentQuiz < quizData.length) {
             loadQuiz();
         } else {
+            let percentage = Math.round((score / quizData.length) * 100);
             quizBox.innerHTML = `
                 <div class="result-card">
                     <h2>ટેસ્ટ પૂરી થઈ ગઈ!</h2>
-                    <p style="font-size: 22px; margin: 20px 0;">તમારો સ્કોર: <strong>${score} / ${quizData.length}</strong></p>
+                    <p style="font-size: 22px; margin: 15px 0;">તમારો સ્કોર: <strong>${score} / ${quizData.length}</strong></p>
+                    <p style="font-size: 18px; color: #555;">પરિણામ: <strong>${percentage}%</strong></p>
                     <button class="restart-btn" onclick="location.reload()">ફરીથી ટેસ્ટ આપો</button>
                 </div>
             `;
