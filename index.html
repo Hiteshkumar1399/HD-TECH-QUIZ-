@@ -6,7 +6,7 @@
     <title>ઓનલાઈન ટેસ્ટ ક્વિઝ</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             background-color: #f0f2f5;
             margin: 0;
             padding: 20px;
@@ -101,107 +101,100 @@
 </head>
 <body>
 
-<div class="quiz-container" id="quiz">
-    <!-- ક્વિઝ અહીં લોડ થશે -->
+<div class="quiz-container">
+    <div id="quiz-box">
+        <h2>ઓનલાઈન ક્વિઝ ટેસ્ટ</h2>
+        <div class="question" id="question">પ્રશ્ન લોડ થઈ રહ્યો છે...</div>
+        <div class="options-container" id="options"></div>
+        <div class="footer">
+            <span id="progress">પ્રશ્ન 0 / 0</span>
+            <button class="next-btn" id="next-btn">આગળનો પ્રશ્ન</button>
+        </div>
+    </div>
 </div>
 
 <script>
     const quizData = [
         {
             question: "ગુજરાતનું પાટનગર કયું છે?",
-            a: "અમદાવાદ",
-            b: "ગાંધીનગર",
-            c: "સુરત",
-            d: "રાજકોટ",
+            a: "અમદાવાદ", b: "ગાંધીનગર", c: "સુરત", d: "રાજકોટ",
             correct: "b"
         },
         {
             question: "ભારતનું રાષ્ટ્રીય પક્ષી કયું છે?",
-            a: "પોપટ",
-            b: "ચકલી",
-            c: "મોર",
-            d: "કબૂતર",
+            a: "પોપટ", b: "ચકલી", c: "મોર", d: "કબૂતર",
             correct: "c"
         },
         {
             question: "૫ + ૭ કેટલા થાય?",
-            a: "૧૦",
-            b: "૧૧",
-            c: "૧૨",
-            d: "૧૩",
+            a: "૧૦", b: "૧૧", c: "૧૨", d: "૧૩",
             correct: "c"
         }
     ];
 
-    const quiz = document.getElementById('quiz');
     let currentQuiz = 0;
     let score = 0;
     let answered = false;
 
-    loadQuiz();
+    const questionEl = document.getElementById('question');
+    const optionsContainer = document.getElementById('options');
+    const progressEl = document.getElementById('progress');
+    const nextBtn = document.getElementById('next-btn');
+    const quizBox = document.getElementById('quiz-box');
 
     function loadQuiz() {
         answered = false;
-        const currentQuizData = quizData[currentQuiz];
+        nextBtn.style.display = 'none';
+        optionsContainer.innerHTML = '';
         
-        quiz.innerHTML = `
-            <h2>ઓનલાઈન ક્વિઝ ટેસ્ટ</h2>
-            <div class="question">${currentQuiz + 1}. ${currentQuizData.question}</div>
-            <div class="options-container">
-                <button class="option-btn" data-ans="a">${currentQuizData.a}</button>
-                <button class="option-btn" data-ans="b">${currentQuizData.b}</button>
-                <button class="option-btn" data-ans="c">${currentQuizData.c}</button>
-                <button class="option-btn" data-ans="d">${currentQuizData.d}</button>
-            </div>
-            <div class="footer">
-                <span>પ્રશ્ન ${currentQuiz + 1} / ${quizData.length}</span>
-                <button class="next-btn" id="next">આગળનો પ્રશ્ન</button>
-            </div>
-        `;
+        const currentData = quizData[currentQuiz];
+        questionEl.innerText = `${currentQuiz + 1}. ${currentData.question}`;
+        progressEl.innerText = `પ્રશ્ન ${currentQuiz + 1} / ${quizData.length}`;
 
-        const optionBtns = document.querySelectorAll('.option-btn');
-        optionBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                if(answered) return;
-                selectAnswer(e.target, currentQuizData.correct);
-            });
+        ['a', 'b', 'c', 'd'].forEach(letter => {
+            const btn = document.createElement('button');
+            btn.classList.add('option-btn');
+            btn.innerText = currentData[letter];
+            btn.setAttribute('data-ans', letter);
+            btn.addEventListener('click', selectAnswer);
+            optionsContainer.appendChild(btn);
         });
     }
 
-    function selectAnswer(selectedBtn, correctAnswer) {
+    function selectAnswer(e) {
+        if(answered) return;
         answered = true;
-        const userAns = selectedBtn.getAttribute('data-ans');
-        const nextBtn = document.getElementById('next');
         
-        if(userAns === correctAnswer) {
+        const selectedBtn = e.target;
+        const userAns = selectedBtn.getAttribute('data-ans');
+        const correctAns = quizData[currentQuiz].correct;
+
+        if(userAns === correctAns) {
             selectedBtn.classList.add('correct');
             score++;
         } else {
             selectedBtn.classList.add('wrong');
-            document.querySelector([data-ans="${correctAnswer}"]).classList.add('correct');
+            document.querySelector(`[data-ans="${correctAns}"]`).classList.add('correct');
         }
-        
         nextBtn.style.display = 'block';
-        
-        nextBtn.addEventListener('click', () => {
-            currentQuiz++;
-            if(currentQuiz < quizData.length) {
-                loadQuiz();
-            } else {
-                showResult();
-            }
-        });
     }
 
-    function showResult() {
-        quiz.innerHTML = `
-            <div class="result-card">
-                <h2>ટેસ્ટ પૂરી થઈ ગઈ!</h2>
-                <p style="font-size: 22px; margin: 20px 0;">તમારો સ્કોર: <strong>${score} / ${quizData.length}</strong></p>
-                <button class="restart-btn" onclick="location.reload()">ફરીથી ટેસ્ટ આપો</button>
-            </div>
-        `;
-    }
+    nextBtn.addEventListener('click', () => {
+        currentQuiz++;
+        if(currentQuiz < quizData.length) {
+            loadQuiz();
+        } else {
+            quizBox.innerHTML = `
+                <div class="result-card">
+                    <h2>ટેસ્ટ પૂરી થઈ ગઈ!</h2>
+                    <p style="font-size: 22px; margin: 20px 0;">તમારો સ્કોર: <strong>${score} / ${quizData.length}</strong></p>
+                    <button class="restart-btn" onclick="location.reload()">ફરીથી ટેસ્ટ આપો</button>
+                </div>
+            `;
+        }
+    });
+
+    loadQuiz();
 </script>
 
 </body>
