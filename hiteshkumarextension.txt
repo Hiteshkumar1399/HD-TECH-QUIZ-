@@ -1,0 +1,214 @@
+   
+
+
+
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ઓનલાઈન ટેસ્ટ ક્વિઝ</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .quiz-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .question {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option-btn {
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-btn:hover {
+            background-color: #e8f0fe;
+            border-color: #1a73e8;
+        }
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #28a745 !important;
+            color: #155724;
+        }
+        .wrong {
+            background-color: #f8d7da !important;
+            border-color: #dc3545 !important;
+            color: #721c24;
+        }
+        .footer {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .next-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: none;
+        }
+        .next-btn:hover {
+            background-color: #1557b0;
+        }
+        .result-card {
+            text-align: center;
+        }
+        .restart-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container" id="quiz">
+    <!-- ક્વિઝ અહીં લોડ થશે -->
+</div>
+
+<script>
+    // ૧. અહીં તમે તમારા ગમે તેટલા પ્રશ્નો ઉમેરી શકો છો
+    const quizData = [
+        {
+            question: "ગુજરાતનું પાટનગર કયું છે?",
+            a: "અમદાવાદ",
+            b: "ગાંધીનગર",
+            c: "સુરત",
+            d: "રાજકોટ",
+            correct: "b"
+        },
+        {
+            question: "ભારતનો રાષ્ટ્રીય પક્ષી કયો છે?",
+            a: "પોપટ",
+            b: "ચકલી",
+            c: "મોર",
+            d: "કબૂતર",
+            correct: "c"
+        },
+        {
+            question: "૫ + ૭ કેટલા થાય?",
+            a: "૧૦",
+            b: "૧૧",
+            c: "૧૨",
+            d: "૧૩",
+            correct: "c"
+        }
+    ];
+
+    const quiz = document.getElementById('quiz');
+    let currentQuiz = 0;
+    let score = 0;
+    let answered = false;
+
+    loadQuiz();
+
+    function loadQuiz() {
+        answered = false;
+        const currentQuizData = quizData[currentQuiz];
+        
+        quiz.innerHTML = `
+            <h2>ઓનલાઈન ક્વિઝ ટેસ્ટ</h2>
+            <div class="question">${currentQuiz + 1}. ${currentQuizData.question}</div>
+            <div class="options-container">
+                <button class="option-btn" data-ans="a">${currentQuizData.a}</button>
+                <button class="option-btn" data-ans="b">${currentQuizData.b}</button>
+                <button class="option-btn" data-ans="c">${currentQuizData.c}</button>
+                <button class="option-btn" data-ans="d">${currentQuizData.d}</button>
+            </div>
+            <div class="footer">
+                <span>પ્રશ્ન ${currentQuiz + 1} / ${quizData.length}</span>
+                <button class="next-btn" id="next">આગળનો પ્રશ્ન</button>
+            </div>
+        `;
+
+        // ઓપ્શન ક્લિક ઇવેન્ટ
+        const optionBtns = document.querySelectorAll('.option-btn');
+        optionBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if(answered) return; // જો એકવાર જવાબ આપી દીધો હોય તો બીજી વાર ક્લિક ન થાય
+                selectAnswer(e.target, currentQuizData.correct);
+            });
+        });
+    }
+
+    function selectAnswer(selectedBtn, correctAnswer) {
+        answered = true;
+        const userImg = selectedBtn.getAttribute('data-ans');
+        const nextBtn = document.getElementById('next');
+        
+        if(userImg === correctAnswer) {
+            selectedBtn.classList.add('correct');
+            score++;
+        } else {
+            selectedBtn.classList.add('wrong');
+            // સાચો ઓપ્શન પણ હાઈલાઈટ કરો
+            document.querySelector([data-ans="${correctAnswer}"]).classList.add('correct');
+        }
+        
+        nextBtn.style.display = 'block';
+        
+        nextBtn.addEventListener('click', () => {
+            currentQuiz++;
+            if(currentQuiz < quizData.length) {
+                loadQuiz();
+            } else {
+                showResult();
+            }
+        });
+    }
+
+    function showResult() {
+        quiz.innerHTML = `
+            <div class="result-card">
+                <h2>ટેસ્ટ પૂરી થઈ ગઈ!</h2>
+                <p style="font-size: 22px; margin: 20px 0;">તમારો સ્કોર: <strong>${score} / ${quizData.length}</strong></p>
+                <button class="restart-btn" onclick="location.reload()">ફરીથી ટેસ્ટ આપો</button>
+            </div>
+        `;
+    }
+</script>
+
+</body>
+</html>
