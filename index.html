@@ -1,7 +1,3 @@
-   
-
-
-
 <!DOCTYPE html>
 <html lang="gu">
 <head>
@@ -53,6 +49,7 @@
             text-align: left;
             cursor: pointer;
             transition: all 0.2s ease;
+            width: 100%;
         }
         .option-btn:hover {
             background-color: #e8f0fe;
@@ -61,12 +58,12 @@
         .correct {
             background-color: #d4edda !important;
             border-color: #28a745 !important;
-            color: #155724;
+            color: #155724 !important;
         }
         .wrong {
             background-color: #f8d7da !important;
             border-color: #dc3545 !important;
-            color: #721c24;
+            color: #721c24 !important;
         }
         .footer {
             margin-top: 25px;
@@ -109,7 +106,6 @@
 </div>
 
 <script>
-    // ૧. અહીં તમે તમારા ગમે તેટલા પ્રશ્નો ઉમેરી શકો છો
     const quizData = [
         {
             question: "ગુજરાતનું પાટનગર કયું છે?",
@@ -120,7 +116,7 @@
             correct: "b"
         },
         {
-            question: "ભારતનો રાષ્ટ્રીય પક્ષી કયો છે?",
+            question: "ભારતનું રાષ્ટ્રીય પક્ષી કયું છે?",
             a: "પોપટ",
             b: "ચકલી",
             c: "મોર",
@@ -163,11 +159,10 @@
             </div>
         `;
 
-        // ઓપ્શન ક્લિક ઇવેન્ટ
         const optionBtns = document.querySelectorAll('.option-btn');
         optionBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
-                if(answered) return; // જો એકવાર જવાબ આપી દીધો હોય તો બીજી વાર ક્લિક ન થાય
+                if(answered) return;
                 selectAnswer(e.target, currentQuizData.correct);
             });
         });
@@ -175,15 +170,14 @@
 
     function selectAnswer(selectedBtn, correctAnswer) {
         answered = true;
-        const userImg = selectedBtn.getAttribute('data-ans');
+        const userAns = selectedBtn.getAttribute('data-ans');
         const nextBtn = document.getElementById('next');
         
-        if(userImg === correctAnswer) {
+        if(userAns === correctAnswer) {
             selectedBtn.classList.add('correct');
             score++;
         } else {
             selectedBtn.classList.add('wrong');
-            // સાચો ઓપ્શન પણ હાઈલાઈટ કરો
             document.querySelector([data-ans="${correctAnswer}"]).classList.add('correct');
         }
         
