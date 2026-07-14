@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>રોડ સેફ્ટી ક્વિઝ (Road Safety Quiz)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .quiz-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 700px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        .progress-bar {
+            height: 8px;
+            width: 100%;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background-color: #27ae60;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .question-number {
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+        .question-text {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option-btn {
+            background-color: #fff;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            padding: 12px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            color: #34495e;
+        }
+        .option-btn:hover {
+            background-color: #f8f9fa;
+            border-color: #3498db;
+        }
+        .option-btn.correct {
+            background-color: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        .option-btn.wrong {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        .controls {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-next {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+        .btn-next:hover {
+            background-color: #2980b9;
+        }
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+        .result-title {
+            font-size: 26px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .score {
+            font-size: 40px;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+        .btn-restart {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-restart:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <!-- ક્વિઝ ચાલુ હશે ત્યારે આ સેક્શન દેખાશે -->
+    <div id="quiz-box">
+        <h1>રોડ સેફ્ટી જાગૃતિ ક્વિઝ</h1>
+        <div class="subtitle">ટ્રાફિક નિયમો અને માર્ગ સલામતી અંગે ટેસ્ટ</div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div class="question-number" id="question-num">પ્રશ્ન 1 માંથી 30</div>
+        <div class="question-text" id="question-text">પ્રશ્ન લોડ થઈ રહ્યો છે...</div>
+        
+        <div class="options-container" id="options-container">
+            <!-- વિકલ્પો અહીં ડાયનેમિકલી ઉમેરાશે -->
+        </div>
+        
+        <div class="controls">
+            <span id="score-counter" style="color: #7f8c8d;">સાચા જવાબો: 0</span>
+            <button class="btn-next" id="next-btn" onclick="nextQuestion()">આગળ વધો</button>
+        </div>
+    </div>
+
+    <!-- ક્વિઝ પૂરી થયા પછી આ સેક્શન દેખાશે -->
+    <div id="result-box" class="result-container">
+        <div class="result-title">🎉 ક્વિઝ પૂર્ણ થઈ! 🎉</div>
+        <div class="score" id="final-score">0 / 30</div>
+        <p id="performance-msg" style="font-size: 18px; color: #34495e; margin-bottom: 25px;"></p>
+        <button class="btn-restart" onclick="restartQuiz()">ફરીથી પ્રયત્ન કરો</button>
+    </div>
+</div>
+
+<script>
+    // રોડ સેફ્ટીના મહત્વના ૩૦ પ્રશ્નો
+    const questions = [
+        {
+            q: "પીળા રંગની સિગ્નલ લાઈટ શું સૂચવે છે?",
+            options: ["વાહન રોકો", "ધીમા પડો અને સાવચેતીપૂર્વક આગળ વધો", "ઝડપથી નીકળી જાઓ", "વાહન ડાબી બાજુ લો"],
+            correct: 1
+        },
+        {
+            q: "કયા વાહનોને રોડ પર જવા માટે સર્વપ્રથમ અગ્રતા (Priority) આપવી જોઈએ?",
+            options: ["વીઆઈપી કાફલો", "સરકારી લક્ઝરી બસો", "એમ્બ્યુલન્સ અને ફાયર બ્રિગેડ", "ભારે માલવાહક ટ્રક"],
+            correct: 2
+        },
+        {
+            q: "રોડ પર દોરેલી તૂટક સફેદ લાઈન શું સૂચવે છે?",
+            options: ["ટ્રેક બદલવાની કે ઓવરટેક કરવાની મનાઈ છે", "સાવચેતી રાખીને ટ્રેક બદલી શકાય કે ઓવરટેક કરી શકાય", "વાહન ત્યાં જ ઉભું રાખવું", "માર્ગ વન-વે છે"],
+            correct: 1
+        },
+        {
+            q: "મોટર વ્હીકલ એક્ટ મુજબ ટુ-વ્હીલર ચલાવતી વખતે હેલ્મેટ કોણે પહેરવું ફરજિયાત છે?",
+            options: ["માત્ર ચાલકે", "માત્ર પાછળ બેસનાર વ્યક્તિએ", "ચાલક અને પાછળ બેસનાર બંનેએ", "૧૮ વર્ષથી નાની ઉંમરના લોકોએ"],
+            correct: 2
+        },
+        {
+            q: "ઝેબ્રા ક્રોસિંગ શેના માટે હોય છે?",
+            options: ["પગપાળા ચાલનારાઓ માટે રસ્તો ઓળંગવા", "વાહન પાર્ક કરવા માટે", "ઓવરટેકિંગ માટે", "પોલીસ ચેકિંગ માટે"],
+            correct: 0
+        },
+        {
+            q: "ઢાળ ઉતરતી વખતે વાહનની ઝડપ પર કાબૂ રાખવા માટે કઈ બાબત વધુ યોગ્ય છે?",
+            options: ["ગિયર ન્યુટ્રલ કરીને બ્રેક મારવી", "એન્જિન બંધ કરી દેવું", "યોગ્ય નાના ગિયરમાં રાખીને એન્જિન બ્રેકિંગ વાપરવું", "માત્ર હેન્ડબ્રેક વાપરવી"],
+            correct: 2
+        },
+        {
+            q: "મોબાઈલ પર વાત કરતાં વાહન ચલાવવું એ...",
+            options: ["હેન્ડ્સ-ફ્રી કીટ વાપરીને કરી શકાય", "તમામ સંજોગોમાં ગેરકાયદેસર અને જોખમી છે", "જ્યારે ટ્રાફિક ન હોય ત્યારે યોગ્ય છે", "માત્ર હાઈવે પર જ પ્રતિબંધિત છે"],
+            correct: 1
+        },
+        {
+            q: "રાત્રે સામેથી વાહન આવતું હોય ત્યારે હેડલાઈટ કયા મોડ પર રાખવી જોઈએ?",
+            options: ["હાઇ બીમ (High Beam) પર", "ડીપ બીમ / લો બીમ (Low Beam) પર", "હેડલાઈટ બંધ કરી દેવી", "પાર્કિંગ લાઈટ ચાલુ રાખવી"],
+            correct: 1
+        },
+        {
+            q: "મોટર વ્હીકલ એક્ટ મુજબ ડ્રાઈવિંગ લાઈસન્સ મેળવવા માટે લઘુત્તમ વયમર્યાદા (ગિયર વગરના નાના વાહન સિવાય) કેટલી છે?",
+            options: ["16 વર્ષ", "18 વર્ષ", "21 વર્ષ", "20 વર્ષ"],
+            correct: 1
+        },
+        {
+            q: "પગપાળા ચાલતા મુસાફરો માટે રસ્તા પર ફૂટપાથ ન હોય, તો કઈ બાજુ ચાલવું જોઈએ?",
+            options: ["ડાબી બાજુ", "રોડની બિલકુલ વચ્ચે", "સામેથી આવતા વાહનો દેખાય તે રીતે જમણી બાજુ", "ગમે તે બાજુ ચાલી શકાય"],
+            correct: 2
+        },
+        {
+            q: "વાહન ચલાવતી વખતે કયો દસ્તાવેજ સાથે રાખવો ફરજિયાત નથી?",
+            options: ["ડ્રાઇવિંગ લાયસન્સ", "વાહનનું રજીસ્ટ્રેશન સર્ટિફિકેટ (RC)", "ઇન્સ્યોરન્સ અને PUC સર્ટિફિકેટ", "વાહન ખરીદ્યાનું ઓરિજિનલ બિલ"],
+            correct: 3
+        },
+        {
+            q: "ગોળ ચક્કર (Roundabout) પર પ્રથમ હક કોનો હોય છે?",
+            options: ["જે વાહનો ગોળ ચક્કરમાં પહેલેથી જમણી બાજુથી આવી રહ્યા છે તેમનો", "જે વાહનો સીધા જવા માંગે છે તેમનો", "ભારે વાહનોનો", "જે વાહન હોર્ન મારે તેનો"],
+            correct: 0
+        },
+        {
+            q: "વાહન પાર્ક કરતી વખતે કઈ બાબત ધ્યાનમાં રાખવી જોઈએ?",
+            options: ["રસ્તાના વળાંક પર જ પાર્ક કરવું", "અન્ય વાહનો કે ટ્રાફિકને અડચણ ન થાય તે રીતે પાર્કિંગ ઝોનમાં પાર્ક કરવું", "ફાયર હાઇડ્રન્ટ (બંબાના નળ) ની બિલકુલ સામે રાખવું", "બસ સ્ટેન્ડના એન્ટ્રી ગેટ પાસે"],
+            correct: 1
+        },
+        {
+            q: "સ્કૂલ કે હોસ્પિટલ જેવા વિસ્તાર નજીક કેવું સાઇનબોર્ડ જોવા મળે છે?",
+            options: ["ગતિ મર્યાદા વધારો", "હોર્ન વગાડવા પર પ્રતિબંધ (Silent Zone)", "ઓવરટેક કરવાની છૂટ", "વાહન ઉભું રાખવાની મનાઈ"],
+            correct: 1
+        },
+        {
+            q: "વાહન ડાબી બાજુ વળતી વખતે ડ્રાઇવરે ક્યારે ઇન્ડિકેટર (ઇશારો) આપવો જોઈએ?",
+            options: ["વળ્યા પછી તરત જ", "વળાંક લેવાના ઓછામાં ઓછા 30 મીટર પહેલાં", "માત્ર જો પાછળ વાહન આવતું હોય તો જ", "કોઈ ઇશારો આપવાની જરૂર નથી"],
+            correct: 1
+        },
+        {
+            q: "રસ્તા પર દોરેલી સળંગ પીળી કે સફેદ લાઈન શું સૂચવે છે?",
+            options: ["ગમે ત્યારે ઓવરટેક કરો", "લાઈન ક્રોસ કરવી નહીં કે ઓવરટેક કરવો નહીં", "માત્ર રાત્રે જ લાઈન ક્રોસ કરો", "આ લાઈન માત્ર સુશોભન માટે છે"],
+            correct: 1
+        },
+        {
+            q: "દારૂ પીને વાહન ચલાવવા પર મોટર વ્હીકલ એક્ટ હેઠળ...",
+            options: ["માત્ર નજીવો દંડ થઈ શકે", "લાઇસન્સ રદ થવા સાથે જેલની સજા અને ભારે દંડની જોગવાઈ છે", "સાંજના સમયે છૂટછાટ છે", "માત્ર ચેતવણી આપી છોડી દેવાય છે"],
+            correct: 1
+        },
+        {
+            q: "પાછળનું દ્રશ્ય જોવા માટેના અરીસા (Rear View Mirror) નો પ્રાથમિક ઉપયોગ શું છે?",
+            options: ["પાછળથી આવતા ટ્રાફિક પર નજર રાખવી", "ગાડીની પાછલી સીટના મુસાફરોને જોવા", "પોતાનો ચહેરો જોવા", "વાહનની અંદરની સજાવટ જોવા"],
+            correct: 0
+        },
+        {
+            q: "ચાલુ વાહને અચાનક બ્રેક મારવાથી શું અકસ્માત થઈ શકે?",
+            options: ["પાછળનું વાહન તમારી સાથે અથડાઈ શકે", "બળતણની બચત થાય", "વાહન વધુ સુરક્ષિત બને", "ટાયર લાંબુ આયુષ્ય મેળવે"],
+            correct: 0
+        },
+        {
+            q: "ચોમાસામાં વાહન ચલાવતી વખતે સ્લિપ થવાથી બચવા માટે શું કરવું જોઈએ?",
+            options: ["ટાયરનું પ્રેશર ઓછું રાખવું", "ઝડપ મર્યાદિત રાખવી અને અચાનક બ્રેક મારવાનું ટાળવું", "ફુલ સ્પીડે વાહન ચલાવવું", "સતત બ્રેક દબાવી રાખવી"],
+            correct: 1
+        },
+        {
+            q: "પોર્ટેબલ ફાયર એક્સટિંગ્યુશર (અગ્નિશામક) વાહનમાં રાખવું શા માટે સલાહભર્યું છે?",
+            options: ["વાહનમાં અચાનક આગ લાગે ત્યારે તાત્કાલિક કાબૂ મેળવવા", "માત્ર પોલીસ દંડથી બચવા", "ગાડીના વજન સંતુલન માટે", "આ ફરજિયાત હોતું નથી એટલે ન રાખવું જોઈએ"],
+            correct: 0
+        },
+        {
+            q: "રોડ અકસ્માતમાં ઘાયલ વ્યક્તિને તાત્કાલિક મદદ કરનાર વ્યક્તિને (Good Samaritan) કાયદાકીય રીતે...",
+            options: ["પોલીસ કે કોર્ટ દ્વારા હેરાન કરી શકાતી નથી અને પ્રોત્સાહિત કરાય છે", "સારવારનો તમામ ખર્ચ ભોગવવો પડે છે", "જેલમાં પૂરી દેવામાં આવે છે", "સાક્ષી બનવા દબાણ કરાય છે"],
+            correct: 0
+        },
+        {
+            q: "ત્રિકોણ આકારના ટ્રાફિક ચિહ્નો સામાન્ય રીતે કયા પ્રકારની માહિતી આપે છે?",
+            options: ["માહિતીસભર (Informative)", "ચેતવણી દર્શાવતા (Cautionary / Warning)", "નિયમનકારી કે ફરજિયાત (Mandatory)", "રૂટ ડાયરેક્શન માટેના"],
+            correct: 1
+        },
+        {
+            q: "ગોળ (Circular) આકારના ચિહ્નો સામાન્ય રીતે શું દર્શાવે છે?",
+            options: ["ફરજિયાત અથવા આદેશાત્મક નિયમો (Mandatory)", "માત્ર હાઈવેના માર્ગો", "રસ્તાની આજુબાજુની હોટેલ્સ", "ચેતવણી"],
+            correct: 0
+        },
+        {
+            q: "મોટરકાર ચલાવતી વખતે સીટ બેલ્ટ ક્યારે બાંધવો જોઈએ?",
+            options: ["માત્ર હાઇવે પર ડ્રાઇવ કરતી વખતે", "તમામ મુસાફરી દરમિયાન (શહેરી રસ્તાઓ સહિત)", "જ્યારે ટ્રાફિક પોલીસ દેખાય ત્યારે જ", "જ્યારે વરસાદ પડી રહ્યો હોય ત્યારે"],
+            correct: 1
+        },
+        {
+            q: "ડાબી બાજુથી ઓવરટેક કરવું ક્યારે માન્ય ગણાય?",
+            options: ["ગમે ત્યારે કરી શકાય", "આગળનું વાહન જમણી બાજુ વળવાનો સ્પષ્ટ ઈશારો આપી રહ્યું હોય ત્યારે", "રાતના સમયે ગમે ત્યારે", "જ્યારે ટ્રાફિક બહુ વધારે હોય ત્યારે"],
+            correct: 1
+        },
+        {
+            q: "L-બોર્ડ (લાલ રંગનો L અક્ષર) વાહન પર લગાવવું ક્યારે જરૂરી છે?",
+            options: ["વાહન નવું ખરીદ્યું હોય ત્યારે", "ડ્રાઇવર લર્નિંગ લાઇસન્સ ધારક હોય અને શીખી રહ્યો હોય ત્યારે", "લાઇસન્સ વગર ડ્રાઇવ કરવા માટે", "વિદેશી મુસાફરો માટે"],
+            correct: 1
+        },
+        {
+            q: "ઝુચી પડતા અથવા સાંકડા પુલ પરથી પસાર થતી વખતે સામેથી અન્ય વાહન આવી રહ્યું હોય તો શું કરવું?",
+            options: ["સ્પીડ વધારીને પહેલા નીકળી જવું", "સામેના વાહનને રસ્તો આપવા માટે પુલ પહેલા જ વાહન ઉભું રાખવું", "સતત હોર્ન વગાડતા રહેવું", "વાહન પુલની વચ્ચે જ પાર્ક કરી દેવું"],
+            correct: 1
+        },
+        {
+            q: "રેલ્વે ફાટક બંધ હોય ત્યારે નીચેનામાંથી કઈ ક્રિયા ગુનો બને છે?",
+            options: ["ફાટકની નીચેથી બાઈક કે વાહન કાઢવાનો પ્રયાસ કરવો", "એન્જિન બંધ કરીને રાહ જોવી", "બ્રેક લગાવીને શાંત ઊભા રહેવું", "યોગ્ય અંતરે વાહન રાખવું"],
+            correct: 0
+        },
+        {
+            q: "વાહનમાં 'PUC' નું પૂરું નામ શું છે?",
+            options: ["Public Utility Certificate", "Pollution Under Control Certificate", "Petrol Usage Controller", "People Union Council"],
+            correct: 1
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let selectedAnswer = false;
+
+    const quizBox = document.getElementById("quiz-box");
+    const resultBox = document.getElementById("result-box");
+    const questionNum = document.getElementById("question-num");
+    const questionText = document.getElementById("question-text");
+    const optionsContainer = document.getElementById("options-container");
+    const nextBtn = document.getElementById("next-btn");
+    const progressBar = document.getElementById("progress");
+    const scoreCounter = document.getElementById("score-counter");
+    const finalScore = document.getElementById("final-score");
+    const performanceMsg = document.getElementById("performance-msg");
+
+    function loadQuestion() {
+        selectedAnswer = false;
+        nextBtn.style.display = "none";
+        optionsContainer.innerHTML = "";
+        
+        const currentQuestion = questions[currentQuestionIndex];
+        
+        // અપડેટ પ્રશ્ન નંબર અને લખાણ
+        questionNum.innerText = `પ્રશ્ન ${currentQuestionIndex + 1} માંથી ${questions.length}`;
+        questionText.innerText = currentQuestion.q;
+        
+        // પ્રોગ્રેસ બાર અપડેટ કરો
+        const progressPercentage = ((currentQuestionIndex) / questions.length) * 100;
+        progressBar.style.width = `${progressPercentage}%`;
+
+        // વિકલ્પો બતાવો
+        currentQuestion.options.forEach((option, index) => {
+            const button = document.createElement("button");
+            button.innerText = option;
+            button.classList.add("option-btn");
+            button.addEventListener("click", () => selectOption(button, index));
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    function selectOption(selectedBtn, index) {
+        if (selectedAnswer) return; // જો એકવાર જવાબ આપી દીધો હોય તો ફરીથી ક્લિક ન થાય
+        
+        selectedAnswer = true;
+        const currentQuestion = questions[currentQuestionIndex];
+        const correctIndex = currentQuestion.correct;
+        const allButtons = optionsContainer.querySelectorAll(".option-btn");
+
+        if (index === correctIndex) {
+            selectedBtn.classList.add("correct");
+            score++;
+            scoreCounter.innerText = `સાચા જવાબો: ${score}`;
+        } else {
+            selectedBtn.classList.add("wrong");
+            // સાચો જવાબ હાઇલાઇટ કરો
+            allButtons[correctIndex].classList.add("correct");
+        }
+
+        // 'આગળ વધો' બટન બતાવો
+        nextBtn.style.display = "block";
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        progressBar.style.width = "100%";
+        quizBox.style.display = "none";
+        resultBox.style.display = "block";
+        
+        finalScore.innerText = `${score} / ${questions.length}`;
+        
+        let message = "";
+        if (score === questions.length) {
+            message = "🏆 અદ્ભુત! તમે માર્ગ સલામતીના તમામ નિયમો બરાબર જાણો છો. તમે એક આદર્શ નાગરિક છો!";
+        } else if (score >= 25) {
+            message = "👍 ખુબ સરસ! તમારું રોડ સેફ્ટી જ્ઞાન ઘણું સારું છે. સુરક્ષિત ડ્રાઇવિંગ કરતા રહો.";
+        } else if (score >= 15) {
+            message = "⚠️ સારું છે, પણ હજુ વધુ સુધારો કરવાની જરૂર છે. ટ્રાફિક નિયમોનું વધુ કાળજીપૂર્વક પાલન કરો.";
+        } else {
+            message = "🚨 તમારે ટ્રાફિક નિયમો શીખવાની ઘણી જરૂર છે. રસ્તા પર નીકળો ત્યારે તમારી અને અન્યોની સુરક્ષાનું ધ્યાન રાખો.";
+        }
+        performanceMsg.innerText = message;
+    }
+
+    function restartQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        scoreCounter.innerText = "સાચા જવાબો: 0";
+        quizBox.style.display = "block";
+        resultBox.style.display = "none";
+        loadQuestion();
+    }
+
+    // પહેલો પ્રશ્ન લોડ કરો
+    loadQuestion();
+</script>
+
+</body>
+</html>
